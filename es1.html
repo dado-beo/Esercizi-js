@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione prenotazioni</title>
+    <style>
+        td, th, table{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gestione delle prenotazioni per un Evento</h1>
+    <form id="form">
+        <table> 
+            <tr>
+                <td>Codice Prenotazione</td>
+                <td><input type="text" id="codicePrenotazione" name="codicePrenotazione" placeholder="Inserisci il tuo codice Prenotazione"></td>
+            </tr>
+
+            <tr>
+                <td>Numero di biglietti</td>
+                <td><input type="number" id="numeroDiBiglietti" name="numeroDiBiglietti" placeholder="" min="0" max="100"></td>
+            </tr>
+
+            <tr>
+                <td><input type="button" onclick="aggiungiPrenotazione()">Aggiungi Prenotazione</td>
+                <td><input type="button" onclick="mostraPrenotazioni()">Mostra Prenotazioni</td>
+            </tr>
+        </table>
+    </form>
+    <hr>
+    <div id="generaTabella"></div>
+    <div id="valoriMaggiori"></div>
+    
+    <script>
+        var array = []; // Ci inserisco i dati delle prenotazioni
+
+        function aggiungiPrenotazione(){
+            // Inserisco i valori in costanti
+            const codicePrenotazione = document.getElementById("codicePrenotazione").value;
+            const numeroDiBiglietti = parseInt(document.getElementById("numeroDiBiglietti").value);
+            
+            if(codicePrenotazione == "" && (isNaN(numeroDiBiglietti) || numeroDiBiglietti == 0 )){
+                alert("Errore! Codice Prenotazione e numero Di Biglietti non validi.")
+                return false;
+            } else if(codicePrenotazione == ""){
+                alert("Errore! Codice Prenotazione non valido.")
+                return false;
+            } else if(isNaN(numeroDiBiglietti) || numeroDiBiglietti == 0 ){
+                alert("Errore! numero Di Biglietti non validi.")
+                return false;
+            }
+
+            const bigliettoSingolo = 20; // Costo biglietto
+            
+            var costoBiglietti = (numeroDiBiglietti * bigliettoSingolo); // Costo senza sconto 
+            
+            // Individuo sconto/ prezzo scontato
+            if(numeroDiBiglietti >= 5 && numeroDiBiglietti <= 9){
+                costoBiglietti = (costoBiglietti*10) / 100;
+            } else if(numeroDiBiglietti >= 10){
+                costoBiglietti = (costoBiglietti*20) / 100;
+            }
+            
+            array.push({codicePrenotazione:codicePrenotazione, numeroDiBiglietti:numeroDiBiglietti, costoBiglietti:costoBiglietti}); // Inserisco i valori nell'array
+
+            // Svuoto
+            document.getElementById("codicePrenotazione").value = "";
+            document.getElementById("numeroDiBiglietti").value = "";
+        }
+
+        function mostraPrenotazioni(){
+            let sommaValoriSopraDuecento = 0;
+            
+            let tabella = `<table> 
+                                <tr> 
+                                    <th>Codice Prenotazione</th>
+                                    <th>Numero di Biglietti</th>
+                                    <th>Importo Totale</th>
+                                </tr>`
+            
+            for(dato of array){
+                tabella += `
+                                <tr> 
+                                    <th>${(dato.codicePrenotazione)}</th>
+                                    <th>${(dato.numeroDiBiglietti)}</th>
+                                    <th>${(dato.costoBiglietti)}</th>
+                                </tr>`
+                if(dato.costoBiglietti > 200){
+                    sommaValoriSopraDuecento += dato.costoBiglietti;
+                }
+            }
+            tabella += `</table>`
+
+            document.getElementById("generaTabella").innerHTML = tabella;
+            document.getElementById("valoriMaggiori").innerText = "Ecco la somma degli importi sopra i duecento: "+sommaValoriSopraDuecento;
+        }
+    </script>
+</body>
+</html>
