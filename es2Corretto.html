@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione vendite</title>
+</head>
+<body>
+    <script>
+
+        function calcola_cassa(valore){
+            //var sommaValori = calcola_cassa[0];  errato
+            var sommaValori = arguments[0];  //aggiunto
+            //for(let i = 0; i < length(arguments); i++){  errato
+            for (let i = 1; i < arguments.length; i++) {
+                sommaValori += arguments[i]; //no i+1
+            }
+            alert("Somma valori: "+sommaValori);
+        }
+
+        var valore = calcola_cassa(100, 10, 20, 30);
+        valore = calcola_cassa(160, 15, 5, 10);
+        valore = calcola_cassa(190, 50, 40);
+        
+        //calcola_cassa(valore);  no
+    </script>
+</body>
+</html>
