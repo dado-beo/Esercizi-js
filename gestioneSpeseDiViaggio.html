@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Spese Di Viaggio</title>
+</head>
+<body>
+    <script>
+
+        function calcola_budget(valore){
+            valore = arguments[0];  
+            for (let i = 1; i < arguments.length; i++) {
+                valore -= arguments[i];
+            }
+            alert("Sottrazione valori: "+valore);
+            return valore;
+        }
+
+        var valore = calcola_budget(500, 50, 30, 20);
+        valore = calcola_budget(400, 100, 50);
+        valore = calcola_budget(250, 70, 30);
+    </script>
+</body>
+</html>
