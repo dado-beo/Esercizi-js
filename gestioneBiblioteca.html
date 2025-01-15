@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Biblioteca</title>
+    <style>
+        td, th, table{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gestione delle prenotazioni di una Biblioteca</h1>
+    <form id="form">
+        <table> 
+            <tr>
+                <td>ID Utente</td>
+                <td><input type="text" id="IDutente" name="IDutente"></td>
+            </tr>
+
+            <tr>
+                <td>Titolo del libro prenotato</td>
+                <td><input type="text" id="TitoloDelLibroPrenotato" name="TitoloDelLibroPrenotato"></td>
+            </tr>
+
+            <tr>
+                <td>Numero di giorni di prenotazione</td>
+                <td><input type="number" id="NumeroDiGiorniDiPrenotazione" name="NumeroDiGiorniDiPrenotazione" min="0" max="100"></td>
+            </tr>
+
+            <tr>
+                <td><input type="button" onclick="addBooking()">Aggiungi Prenotazione</td>
+            </tr>
+        </table>
+    </form>
+    <hr>
+    <div id="generaTabella"> </div>
+    <div id="sommaGiorni"></div>
+    
+    <script>
+        let array = []; // Ci inserisco i dati delle prenotazioni
+        var riepilogo = []
+        function addBooking(){
+            // Inserisco i valori in costanti
+            const IDutente = (document.getElementById("IDutente").value);
+            const TitoloDelLibroPrenotato = (document.getElementById("TitoloDelLibroPrenotato").value);
+            const NumeroDiGiorniDiPrenotazione = parseInt(document.getElementById("NumeroDiGiorniDiPrenotazione").value);
+            
+            if(IDutente == "" && TitoloDelLibroPrenotato == "" && (isNaN(NumeroDiGiorniDiPrenotazione) || NumeroDiGiorniDiPrenotazione == null)){
+                alert("Errore! ID Utente, Titolo del libro prenotato e Numero di giorni di prenotazione non validi.")
+                return false;
+            } else if(IDutente == ""){
+                alert("Errore! ID Utente non valido.")
+                return false;
+            } else if(TitoloDelLibroPrenotato == ""){
+                alert("Errore! Titolo del libro prenotato non valido.")
+                return false;
+            } else if((isNaN(NumeroDiGiorniDiPrenotazione) || NumeroDiGiorniDiPrenotazione == null)){
+                alert("Errore! Numero di giorni di prenotazione non validi.")
+                return false;
+            }
+            
+            array.push({IDutente:IDutente, TitoloDelLibroPrenotato:TitoloDelLibroPrenotato, NumeroDiGiorniDiPrenotazione:NumeroDiGiorniDiPrenotazione}); // Inserisco i valori nell'array
+
+            // Svuoto
+            document.getElementById("IDutente").value = "";
+            document.getElementById("TitoloDelLibroPrenotato").value = "";
+            document.getElementById("NumeroDiGiorniDiPrenotazione").value = "";
+            
+            renderTable();
+            updateSummary();
+
+            function renderTable(){
+            let tabella = `<table> 
+                                <tr> 
+                                    <th>ID Utente</th>
+                                    <th>Titolo Del Libro Prenotato</th>
+                                    <th>Numero Di Giorni Di Prenotazione</th>
+                                </tr>`
+            
+            for(let dato of array){
+                tabella += `
+                                <tr> 
+                                    <th>${(dato.IDutente)}</th>
+                                    <th>${(dato.TitoloDelLibroPrenotato)}</th>
+                                    <th>${(dato.NumeroDiGiorniDiPrenotazione)}</th>
+                                </tr>`
+            }
+            tabella += `</table>`
+
+            document.getElementById("generaTabella").innerHTML = tabella;
+            }
+
+            function updateSummary(){
+                let tabella2 = `<table> 
+                                <tr>
+                                    <th colespan = 2>Riepilogo</th>
+                                </tr>
+                                <tr> 
+                                    <th>ID Utente</th>
+                                    <th>Numero Di Giorni Di Prenotazione</th>
+                                </tr>`
+
+                var trovato = false
+
+                for(let dato of riepilogo){
+                    if(IDutente == dato.IDutente){
+                        dato.NumeroDiGiorniDiPrenotazione += NumeroDiGiorniDiPrenotazione;
+                        trovato = true;
+                    }
+                }
+
+                if(trovato == false){
+                    riepilogo.push({IDutente:IDutente, NumeroDiGiorniDiPrenotazione:NumeroDiGiorniDiPrenotazione});
+                }
+
+                for(let dato of riepilogo){
+                    tabella2 += `
+                                <tr> 
+                                    <th>${(dato.IDutente)}</th>
+                                    <th>${(dato.NumeroDiGiorniDiPrenotazione)}</th>
+                                </tr>`
+                } tabella2 += `</table>`
+                document.getElementById("sommaGiorni").innerHTML = tabella2;
+
+            }
+    }
+    </script>
+</body>
+</html>
